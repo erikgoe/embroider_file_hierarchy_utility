@@ -197,7 +197,7 @@ int main( int argc, char* argv[] ) {
                             }
 
                             // Add other files to layout collection
-                            if ( !images.empty() ) {
+                            if ( !found_preference && !images.empty() ) {
                                 auto img = images.front();
                                 String img_stem_trimmed =
                                     img.stem().string(), prefix, suffix;
