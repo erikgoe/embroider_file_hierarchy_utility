@@ -1,0 +1,44 @@
+name: CMake
+
+on:
+  push:
+    tags:
+      - "v*.*"
+      - "v*.*.*"
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: true
+
+    - name: Configure CMake (Linux)
+      if: runner.os == 'Linux'
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Configure CMake (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    - name: Build
+      run: |
+        cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} -j 2
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: |
+          build/src/embroider_file_hierarchy_utility/embroider_file_hierarchy_utility
+          build/src/embroider_file_hierarchy_utility/Release/embroider_file_hierarchy_utility.exe
+        body: "Automated release build."
