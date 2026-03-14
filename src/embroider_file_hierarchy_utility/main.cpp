@@ -94,8 +94,8 @@ int main( int argc, char* argv[] ) {
         }
         existing_trims.push_back( new_name );
     };
-    auto has_suffix_or_equals = []( const String& str, const String& suffix ) {
-        return str.find( suffix ) == str.size() - suffix.size();
+    auto has_suffix_or_prefix_or_equals = []( const String& str, const String& suffix ) {
+        return str.find( suffix ) == str.size() - suffix.size() || str.find( suffix ) == 0;
     };
 
     // Traverse group dirs
@@ -118,7 +118,7 @@ int main( int argc, char* argv[] ) {
                     std::optional<fs::path> fotos_path;
                     for ( auto const& f : fs::directory_iterator{ pattern_folder.path() } ) {
                         if ( f.is_directory() &&
-                             has_suffix_or_equals( f.path().stem().string(), "Fotos" ) ) {
+                             has_suffix_or_prefix_or_equals( f.path().stem().string(), "Fotos" ) ) {
                             fotos_path = f;
                             break;
                         }
