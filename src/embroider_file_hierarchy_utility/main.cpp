@@ -137,7 +137,7 @@ int main( int argc, char* argv[] ) {
                         // Add files to foto collection
                         for ( const auto& img : img_files ) {
                             String stem_trimmed =
-                                trim_on_prefix_suffix( img.stem(), prefix, suffix );
+                                trim_on_prefix_suffix( img.stem().string(), prefix, suffix );
                             fotos_collection.push_back(
                                 FileData{ img, group_name + "__" + pattern_name + "__" +
                                                    stem_trimmed + img.extension().string() } );
@@ -159,7 +159,7 @@ int main( int argc, char* argv[] ) {
                     auto suffix = find_common_suffix( layout_dirs );
                     for ( const auto& lay : layout_dirs ) {
                         String lay_stem_trimmed =
-                            trim_on_prefix_suffix( lay.stem(), prefix, suffix );
+                            trim_on_prefix_suffix( lay.stem().string(), prefix, suffix );
 
                         // Iterate inner most image files
                         std::vector<fs::path> images;
@@ -174,7 +174,7 @@ int main( int argc, char* argv[] ) {
                         // Add files to layout collection
                         for ( const auto& img : images ) {
                             String img_stem_trimmed =
-                                trim_on_prefix_suffix( img.stem(), prefix, suffix );
+                                trim_on_prefix_suffix( img.stem().string(), prefix, suffix );
                             layout_collection.push_back( FileData{
                                 img, group_name + "__" + pattern_name + "__" + lay_stem_trimmed +
                                          "__" + img_stem_trimmed + img.extension().string() } );
