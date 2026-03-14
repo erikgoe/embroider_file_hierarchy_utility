@@ -171,13 +171,41 @@ int main( int argc, char* argv[] ) {
                         auto prefix = find_common_prefix( images );
                         auto suffix = find_common_suffix( images );
 
-                        // Add files to layout collection
-                        for ( const auto& img : images ) {
-                            String img_stem_trimmed =
-                                trim_on_prefix_suffix( img.stem().string(), prefix, suffix );
-                            layout_collection.push_back( FileData{
-                                img, group_name + "__" + pattern_name + "__" + lay_stem_trimmed +
-                                         "__" + img_stem_trimmed + img.extension().string() } );
+                        if ( lay.stem().string().find( "13x18" ) != lay.stem().string().npos ) {
+                            // Special folder
+                            for ( const auto& img : images ) {
+                                String img_stem_trimmed =
+                                    trim_on_prefix_suffix( img.stem().string(), prefix, suffix );
+                                layout_collection.push_back(
+                                    FileData{ img, group_name + "__" + pattern_name + "__" +
+                                                       lay_stem_trimmed + "__" + img_stem_trimmed +
+                                                       img.extension().string() } );
+                            }
+                        } else {
+                            // Prefer 13x18
+                            bool found_preference = false;
+                            for ( const auto& img : images ) {
+                                if ( img.string().find( "13x18" ) != img.string().npos ) {
+                                    String img_stem_trimmed = img.stem().string();
+                                    layout_collection.push_back( FileData{
+                                        img, group_name + "__" + pattern_name + "__" +
+                                                 lay_stem_trimmed + "__" + img_stem_trimmed +
+                                                 img.extension().string() } );
+                                    found_preference = true;
+                                    break;
+                                }
+                            }
+
+                            // Add other files to layout collection
+                            if ( !images.empty() ) {
+                                auto img = images.front();
+                                String img_stem_trimmed =
+                                    img.stem().string(), prefix, suffix;
+                                layout_collection.push_back(
+                                    FileData{ img, group_name + "__" + pattern_name + "__" +
+                                                       lay_stem_trimmed + "__" + img_stem_trimmed +
+                                                       img.extension().string() } );
+                            }
                         }
                     }
                 }
