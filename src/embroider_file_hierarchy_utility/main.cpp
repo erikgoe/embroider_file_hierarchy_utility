@@ -199,8 +199,7 @@ int main( int argc, char* argv[] ) {
                             // Add other files to layout collection
                             if ( !found_preference && !images.empty() ) {
                                 auto img = images.front();
-                                String img_stem_trimmed =
-                                    img.stem().string(), prefix, suffix;
+                                String img_stem_trimmed = img.stem().string(), prefix, suffix;
                                 layout_collection.push_back(
                                     FileData{ img, group_name + "__" + pattern_name + "__" +
                                                        lay_stem_trimmed + "__" + img_stem_trimmed +
@@ -240,6 +239,8 @@ int main( int argc, char* argv[] ) {
     check_collection_compatibility( layout_collection );
     if ( !check_successful ) {
         log( "Not copying files due to error." );
+        log( "Press Enter close the program." );
+        std::cin.get();
         return -1;
     }
 
@@ -264,6 +265,8 @@ int main( int argc, char* argv[] ) {
     copy_file_collection( layout_collection, "layout_collection" );
 
     log( "Done. Copied " + to_string( copy_ctr ) + " new files." );
+    log( "Press Enter close the program." );
+    std::cin.get();
 
     return 0;
 }
